@@ -1,0 +1,108 @@
+
+<ng-container *ngIf="errorMsg">
+  <div class="alert alert-danger d-flex align-items-center">
+    <span class="material-icons me-2">error</span>
+    {{errorMsg}}
+    <span class="material-icons ms-auto" (click)="hideError()" style="cursor: pointer">close</span>
+  </div>
+</ng-container>
+
+
+<div class="card">
+  <div class="card-header text-white bg-info">
+    {{ pageTitle}}
+  </div>
+
+  <div class="card-body">
+    <form novalidate (ngSubmit)="saveHotel()" [formGroup]="hotelForm">
+      <div class="form-group row mb-2">
+        <label for="hotelNameId" class="col-md-2 col-form-label">
+          Nom Hotel*
+        </label>
+        <div class="col-md-8">
+          <input id="hotelNameId" type="text" class="form-control" formControlName="hotelName"
+            placeholder="Nom Hotel (obligatoire)" [ngClass]="{'is-invalid' : formErrors['hotelName'] }"/>
+          <span class="invalid-feedback">
+            {{ formErrors['hotelName'] }}
+          </span>
+        </div>
+      </div>
+      <div class="form-group row mb-2">
+        <label for="hotelPriceId" class="col-md-2 col-form-label">
+          Prix hotel*
+        </label>
+        <div class="col-md-8">
+          <input id="hotelPriceId" type="text" class="form-control" formControlName="price"
+            placeholder="Prix hotel (obligatoire)" [ngClass]="{'is-invalid' : formErrors['price'] }"/>
+            <span class="invalid-feedback">
+              {{ formErrors['price'] }}
+            </span>
+        </div>
+      </div>
+      <div class="form-group row mb-2">
+        <label for="hotelEvalId" class="col-md-2 col-form-label">
+          Evaluation (1-5)
+        </label>
+        <div class="col-md-8">
+          <input id="hotelEvalId" type="text" class="form-control" formControlName="rating"
+            placeholder="Evaluation (1-5)" [ngClass]="{'is-invalid' : formErrors['rating'] }"/>
+            <span class="invalid-feedback">
+              {{ formErrors['rating'] }}
+            </span>
+        </div>
+      </div>
+
+      <div formArrayName="tags">
+        <div class="form-group row mb-2" *ngFor="let tag of tags.controls; let i=index">
+          <label [attr.for]="i" class="col-md-2 col-form-label">
+            {{  'Etiquette ' + i }}
+          </label>
+          <div class="col-md-8">
+            <input type="text"
+            class="form-control"
+            placeholder="{{'Etiquette ' + i}}"
+            [formControlName]="i"/>
+          </div>
+          <button type="button" class="col-md-2 btn btn-outline-danger btn-sm" (click)="deleteTag(i)">
+            Supprimer
+          </button>
+        </div>
+        <div class="row">
+          <div class="col-md-2 mb-2">
+            <button type="button" class="btn btn-outline-primary btn-sm" (click)="addTag()">
+              Ajouter une étiquette
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="form-group row mb-2">
+        <label for="hotelDescriptionId" class="col-md-2 col-form-label">
+          Description
+        </label>
+        <div class="col-md-8">
+          <textarea class="form-control" id="hotelDescriptionId" formControlName="description"></textarea>
+        </div>
+      </div>
+      <div class="form-group row mb-2">
+        <div class="offset-md-2 col-md-4">
+          <button class="btn btn-info me-3" type="submit">
+            Sauvegarder
+          </button>
+          <button class="btn btn-outline-secondary me-3" type="button" routerLink="/hotels">
+            Annuler
+          </button>
+          <button class="btn btn-outline-danger" type="button" (click)="deleteHotel()"
+            [disabled]="hotel?.id == null || hotel?.id == 0">
+            Supprimer
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+</div>
+<pre>
+    {{ hotelForm.value | json}}
+</pre>
